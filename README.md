@@ -165,6 +165,8 @@ Notes:
 2) Some people experience import issues with opencv-python from either pip or conda. If the OpenCV version installed by the automated script does not work for you (i.e. it does not import without errors), try updating with `pip install -U opencv-python` or installing it through other means. 
 The install script installs `opencv-python~=4.5.1.48` installed via `pip`.
 
+# EmocaNote file
+  The emoca_note file contains the note for installing and running Emoca. Mostly on fixing install errors.
 
 ## Usage 
 
