@@ -44,27 +44,35 @@ def save_images(batch, predictions, output_folder):
         img = img * 255
         img = img.astype(np.uint8)
 
-        # plt.figure()
-        # # plot the image with matplotlib 
-        # plt.imshow(img)
-        # write valence and arousal to the image
+        plt.figure()
+        # plot the image with matplotlib 
+        plt.imshow(img)
         expr = AffectNetExpressions(int(top_expr[i].item()))
         text = "Predicted emotion:\n"
         text += f'Arousal: {predictions["arousal"][i].item():.2f} \nValence: {predictions["valence"][i].item():.2f}'
         text += f"\nExpression: {expr.name}, {softmax[i][expr.value].item()*100:.2f}%"
-
-        # plt.title(text)
-        # out_fname = Path(output_folder) / f"{batch['image_name'][i]}.png"
-        # # save the image to the output folder
-        # # axis off 
-        # plt.axis('off')
+        # write valence and arousal to the image
+        plt.title(text)
+        out_fname = Path(output_folder) / f"{batch['image_name'][i]}.png"
+        # save the image to the output folder
+        # axis off 
+        plt.axis('off')
         
-        # plt.savefig(out_fname)
-        # plt.close()
+        plt.savefig(out_fname)
+        plt.close()
 
-        with open(Path(output_folder) / f"{batch['image_name'][i]}.txt", "w") as f:
+def save_text(batch, predictions, output_folder):
+    softmax = F.softmax(predictions["expr_classification"])
+    top_expr =  torch.argmax(softmax, dim=1)
+    for i in range(len(batch["image"])):
+        expr = AffectNetExpressions(int(top_expr[i].item()))
+        text = "Predicted emotion:\n"
+        text += f'Arousal: {predictions["arousal"][i].item():.2f} \nValence: {predictions["valence"][i].item():.2f}'
+        text += f"\nExpression: {expr.name}, {softmax[i][expr.value].item()*100:.2f}%"
+        if not os.path.exists(Path(output_folder) / f"{batch['image_name'][i]}"):
+            os.makedirs(Path(output_folder) / f"{batch['image_name'][i]}")
+        with open(Path(output_folder) / f"{batch['image_name'][i]}/expression.txt", "w") as f:
             f.write(text)
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -75,7 +83,9 @@ def main():
     parser.add_argument('--model_name', type=str, default='EMOCA-emorec', help='Name of the model to use.')
     # parser.add_argument('--model_name', type=str, default='ResNet50', help='Name of the model to use.')
     parser.add_argument('--path_to_models', type=str, default=get_path_to_assets() /"EmotionRecognition")
-
+    parser.add_argument('--save_images', type=bool, default=False, help="If true, output images will be saved")
+    parser.add_argument('--save_codes', type=bool, default=True, help="If true, output emotion detected will be saved")
+    
     args = parser.parse_args()
 
     path_to_models = args.path_to_models 
@@ -105,8 +115,10 @@ def main():
         batch = dataset[i]
         batch["image"] = batch["image"].cuda()
         output = model(batch)
-        
-        save_images(batch, output, output_folder)
+        if args.save_images:
+            save_images(batch, output, output_folder)
+        if args.save_codes:
+            save_text(batch, output, output_folder)
 
     print("Done")
 

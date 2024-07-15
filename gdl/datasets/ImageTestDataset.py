@@ -74,8 +74,12 @@ class TestData(Dataset):
         imagename = imagepath.split('/')[-1].split('.')[0]
 
         image = np.array(imread(imagepath))
+        # print (image.shape)
+        # print (imagepath)
+        # print (image)
         if len(image.shape) == 2:
-            image = image[:, :, None].repeat(1, 1, 3)
+            # image = image[:, :, None].repeat(1, 1, 3)
+            image = np.dstack([image, image, image])
         if len(image.shape) == 3 and image.shape[2] > 3:
             image = image[:, :, :3]
 
@@ -154,6 +158,8 @@ class TestData(Dataset):
             tform = estimate_transform('similarity', src_pts, DST_PTS)
             dst_image = warp(image, tform.inverse, output_shape=(self.resolution_inp, self.resolution_inp))
             dst_image = dst_image.transpose(2, 0, 1)
+            # print(f"././././././././././././././././././. not")
+            dst_image = np.expand_dims(dst_image, axis=0)
             return {'image': torch.tensor(dst_image).float(),
                     'image_name': imagename,
                     'image_path': imagepath,

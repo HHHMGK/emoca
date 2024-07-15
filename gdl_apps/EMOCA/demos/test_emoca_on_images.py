@@ -38,8 +38,8 @@ def main():
     parser.add_argument('--output_folder', type=str, default="image_output", help="Output folder to save the results to.")
     parser.add_argument('--model_name', type=str, default='EMOCA_v2_lr_mse_20', help='Name of the model to use.')
     parser.add_argument('--path_to_models', type=str, default=str(Path(gdl.__file__).parents[1] / "assets/EMOCA/models"))
-    parser.add_argument('--save_images', type=bool, default=True, help="If true, output images will be saved")
-    parser.add_argument('--save_codes', type=bool, default=False, help="If true, output FLAME values for shape, expression, jaw pose will be saved")
+    parser.add_argument('--save_images', type=bool, default=False, help="If true, output images will be saved")
+    parser.add_argument('--save_codes', type=bool, default=True, help="If true, output FLAME values for shape, expression, jaw pose will be saved")
     parser.add_argument('--save_mesh', type=bool, default=False, help="If true, output meshes will be saved")
     parser.add_argument('--mode', type=str, default='detail', help="coarse or detail")
     
@@ -78,10 +78,13 @@ def main():
             sample_output_folder.mkdir(parents=True, exist_ok=True)
 
             if args.save_mesh:
+                # print("Saving mesh")
                 save_obj(emoca, str(sample_output_folder / "mesh_coarse.obj"), vals, j)
             if args.save_images:
+                # print("Saving images")
                 save_images(output_folder, name, visdict, with_detection=True, i=j)
             if args.save_codes:
+                # print("Saving codes")
                 save_codes(Path(output_folder), name, vals, i=j)
 
     print("Done")

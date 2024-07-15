@@ -57,7 +57,8 @@ nếu cần chạy EmotionRecognition:
 				load_state_dict(self.backbone, "/home/huy/emoca/assets/FaceRecognition/resnet50_ft_weight.pkl") 
 		
 		chạy (vd):
-			python demos/test_emotion_recognition_on_images.py --input_folder /home/huy/emoca/gdl_apps/EMOCA/output/vid5/EMOCA_v2_lr_mse_20/processed_2023_Jul_11_17-43-09/vid5/detections --output_folder output/vid5  --model_type image --model_name ResNet50
+			
+			python gdl_apps/EMOCA/demos/test_emotion_recognition_on_images.py --input_folder /home/huy/emoca/gdl_apps/EMOCA/output/vid5/EMOCA_v2_lr_mse_20/processed_2023_Jul_11_17-43-09/vid5/detections --output_folder output/vid5  --model_type image --model_name ResNet50
 			
 	để chạy EMOCA-emorec
 		sửa trong file cfg.yaml của EMOCA-emorec, đoạn load path của model
@@ -66,3 +67,7 @@ nếu cần chạy EmotionRecognition:
 			56-62 chuyển thành 1 trường hợp luôn làm
 			self.deca = instantiate_deca(config.model.deca_cfg, deca_stage , "test")
 
+
+Run script:
+	video:
+	python gdl_apps/EMOCA/demos/test_emoca_on_video.py --input_video /home/huy/Videos/videoCheo/1.mp4 --output_folder output/videoCheo/1/ 

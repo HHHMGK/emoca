@@ -79,6 +79,7 @@ def test(deca, img):
     if len(img["image"].shape) == 3:
         img["image"] = img["image"].view(1,3,224,224)
     vals = deca.encode(img, training=False)
+    
     vals, visdict = decode(deca, vals, training=False)
     return vals, visdict
 

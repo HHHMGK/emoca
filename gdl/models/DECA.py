@@ -478,11 +478,14 @@ class DecaModule(LightningModule):
         original_batch_size = batch['image'].shape[0]
 
         images = batch['image']
-
+        # print(f"././././././././././././././././././.images.shape: {images.shape} with len = {len(images.shape)}")
         if len(images.shape) == 5:
             K = images.shape[1]
         elif len(images.shape) == 4:
             K = 1
+        elif len(images.shape) == 3:
+            K = 1
+            images = images.unsqueeze(0)
         else:
             raise RuntimeError("Invalid image batch dimensions.")
 

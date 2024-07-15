@@ -1,0 +1,7 @@
+TODO:
+    - Change the path of processed, make it simpler
+    
+
+
+TOBECONSIDER:
+    - Update face-alignment to 1.4.x (current 1.3.4)
